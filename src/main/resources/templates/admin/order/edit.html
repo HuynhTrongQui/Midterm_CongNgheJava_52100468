@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Order</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .custom-control {
+            display: inline;
+        }
+
+        .label {
+            display: inline-block;
+            max-width: 100%;
+            margin-bottom: 5px;
+            font-weight: 700;
+            padding: 0 2px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10" style="padding: 0">
+            <form method="post" th:action="@{/admin/order/edit}" th:object="${order}">
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <h3 class="card-title">Update Order</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="idOrder">Mã hóa đơn</label>
+                            <input type="hidden" th:field="*{idOrder}">
+                            <input type="text" class="form-control" id="idOrder" placeholder="HD001" disabled
+                                   th:value="${'HD00' + order.getIdOrder()}">
+                        </div>
+                        <div class="form-group">
+                            <label for="nameCustomer">Tên khách hàng</label>
+                            <input type="text" class="form-control" id="nameCustomer" placeholder=""
+                                   th:field="*{nameUser}"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Tài khoản email</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="hidden" th:field="*{idUser}">
+                                <input type="email" class="form-control" placeholder="Email"
+                                       disabled
+                                       th:field="*{email}"
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="text" class="form-control" id="phone" placeholder=""
+                                   th:value="${order.getPhone()}"
+                                   th:field="*{phone}"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ nhận đơn hàng</label>
+                            <textarea class="form-control" rows="3" placeholder="" th:field="*{address}">[[${order.getAddress}]]</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Ngày đặt hàng</label>
+                            <input type="date"
+                                   class="form-control"
+                                   id="date"
+                                   placeholder=""
+                                   th:value="${#dates.format(order.getDate(), 'yyyy-MM-dd')}"
+                                   disabled
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Tổng Cộng</label>
+                            <input type="text" class="form-control" id="price" placeholder=""
+                                   th:value="${order.getTotal()}"
+                                   th:field="*{total}"
+                                   disabled
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Trạng thái đơn hàng</label>
+                            <span class="custom-control custom-radio">
+                            <input class="custom-control-input custom-control-input-danger" type="radio" id="PENDING"
+                                   name="status"
+                                   th:checked="${order.getStatus() == T(com.project.spring.enums.OrderStatus).PENDING}"
+                                   th:value="${T(com.project.spring.enums.OrderStatus).PENDING}"
+                                   th:field="*{status}"
+                            >
+                            <label for="PENDING" class="custom-control-label label bg-primary ">PENDING</label>
+                        </span>
+                            <span class="custom-control custom-radio">
+                            <input class="custom-control-input custom-control-input-danger" type="radio" id="PROCESSING"
+                                   name="status"
+                                   th:checked="${order.getStatus() == T(com.project.spring.enums.OrderStatus).PROCESSING}"
+                                   th:field="*{status}"
+                                   th:value="${T(com.project.spring.enums.OrderStatus).PROCESSING}"
+                            >
+                            <label for="PROCESSING" class="custom-control-label label bg-info">PROCESSING</label>
+                        </span>
+                            <span class="custom-control custom-radio">
+                            <input class="custom-control-input custom-control-input-danger" type="radio" id="DELIVERED"
+                                   name="status"
+                                   th:checked="${order.getStatus() == T(com.project.spring.enums.OrderStatus).DELIVERED}"
+                                   th:field="*{status}"
+                                   th:value="${T(com.project.spring.enums.OrderStatus).DELIVERED}"
+                            >
+                            <label for="DELIVERED" class="custom-control-label label bg-warning ">DELIVERED</label>
+                        </span>
+                            <span class="custom-control custom-radio">
+                            <input class="custom-control-input custom-control-input-danger" type="radio" id="CANCELLED"
+                                   name="status"
+                                   th:checked="${order.getStatus() == T(com.project.spring.enums.OrderStatus).CANCELLED}"
+                                   th:field="*{status}"
+                                   th:value="${T(com.project.spring.enums.OrderStatus).CANCELLED}"
+                            >
+                            <label for="CANCELLED" class="custom-control-label label bg-danger">CANCELLED</label>
+                        </span>
+                            <span class="custom-control custom-radio">
+                            <input class="custom-control-input custom-control-input-danger" type="radio" id="COMPLETED"
+                                   name="status"
+                                   th:checked="${order.getStatus() == T(com.project.spring.enums.OrderStatus).COMPLETED}"
+                                   th:field="*{status}"
+                                   th:value="${T(com.project.spring.enums.OrderStatus).COMPLETED}"
+                            >
+                            <label for="COMPLETED" class="custom-control-label label bg-success">COMPLETED</label>
+                        </span>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <label>Chi tiết đơn hàng</label>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Mã</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Tổng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="orderDetail,rowStat : ${order.getOrderDetails()}">
+                            <input type="hidden" th:name="|orderDetails[${rowStat.index}].idOrderDetail|" th:value="${orderDetail.idOrderDetail }">
+                            <th scope="row">
+                                <input type="hidden" th:name="|orderDetails[${rowStat.index}].idProduct|"
+                                       th:value="${orderDetail.idProduct}">
+                                <span th:text="${orderDetail.idProduct}">1</span>
+                            </th>
+                            <td th:text="${orderDetail.getNameProduct()}">Mark</td>
+                            <td th:text="${orderDetail.getPriceProduct()}"></td>
+                            <td>
+                                <input type="number" th:name="|orderDetails[${rowStat.index}].quantity|"
+                                       th:value="${orderDetail.quantity}"
+                                       min="1"
+                                >
+                            </td>
+                            <td th:text="${orderDetail.getQuantity()*orderDetail.getPriceProduct()}">@mdo</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th scope="col">Mã</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Tổng</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <div class="card-footer clearfix" style="">
+                        <div style="float: right">
+                            <a type="button" class="btn btn-primary" th:href="@{/admin/order}">Quay về</a>
+                            <button type="submit" class="btn btn-success">Cập nhật</button>
+                            <a type="button" class="btn btn-warning"
+                               th:href="@{'/admin/order/edit/' + ${order.getIdOrder()}}">Hủy</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+
+</html>
+

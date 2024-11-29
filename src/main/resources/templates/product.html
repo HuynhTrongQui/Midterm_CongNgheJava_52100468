@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/tshirt.png" type="image/x-icon">
+    <title>Trang sản phẩm</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <div th:replace="~{library/css}"></div>
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- theme -->
+<!--
+ <div class="form-check form-switch ms-auto mt-3 me-3" id="formSwitch">
+<label class="form-check-label ms-3" for="inputSwicher">
+<i class="fas fa-sun light-mode"></i>
+<i class="fas fa-moon dark-mode d-none"></i>
+</label>
+<input class="form-check-input" type="checkbox" id="inputSwicher" />
+</div>
+-->
+
+
+<!-- start #header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- end #header -->
+
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Our Shop</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="">Home</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Shop</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Shop Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <!-- Shop Sidebar Start -->
+        <div class="col-lg-3 col-md-12">
+            <form th:action="@{/products/filter}" method="get">
+                <div class="sidebar row">
+                    <button type="submit" class="col-12" style="padding: 10px;background-color: #D19C97;border-radius: 20px;">Clear</button>
+                </div>
+            </form>
+            <form th:action="@{/products/filter}" method="get" id="form-filter">
+                <input type="hidden" name="manufacture" th:value="${valueMan}" class="manufacture">
+                <div class="sidebar row">
+                    <button type="submit" id="btn-submit-filter" class="col-12"
+                            style="padding: 10px;margin: 10px 0;background-color: #D19C97;border-radius: 20px;">
+                        Filter
+                    </button>
+                </div>
+                <!-- Start Category-->
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by Category</h5>
+                    <div class="row" th:each="categorys : ${category}">
+                        <div class="radio col-12">
+                            <input type="radio" th:id="${'category' + categorys.getId()}"
+                                   th:value="${categorys.getName()}" class="radio-category"
+                                   name="category" style="padding: 0px;"
+                                   th:checked="${ category_filter!=null &&  category_filter == categorys.getName()}">
+                            <label th:for="${'category' + categorys.getId()}"
+                                   style="box-sizing: border-box;"
+                                   th:text="${categorys.getName()}">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!--End  Category-->
+
+                <!-- Price Start -->
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
+                    <div class="checkbox col-12">
+                        <input type="radio" name="price" id="option1" value="0_100000" th:checked="${price == 1}">
+                        <label th:for="option1"
+                               style="box-sizing: border-box;"> Dưới 100.000 VND
+                        </label>
+                    </div>
+                    <div class="checkbox col-12">
+                        <input type="radio" name="price" id="option2" value="100000_300000"
+                               th:checked="${price == 2}">
+                        <label th:for="option2"
+                               style="box-sizing: border-box;">100.000 VND - 300.000 VND
+                        </label>
+                    </div>
+                    <div class="checkbox col-12">
+                        <input type="radio" name="price" id="option3" value="300000_700000"
+                               th:checked="${price == 3}">
+                        <label th:for="option3"
+                               style="box-sizing: border-box;"> 300.000 VND - 700.000 VND
+                        </label>
+                    </div>
+                    <div class="checkbox col-12">
+                        <input type="radio" name="price" id="option4" value="700001_1000000"
+                               th:checked="${price == 4}">
+                        <label th:for="option4"
+                               style="box-sizing: border-box;"> Trên 700.000 VND
+                        </label>
+                    </div>
+                </div>
+                <!-- Price End -->
+
+                <!-- Color Start -->
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by color</h5>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="color-1" name="colors[]" value="black" th:checked="${colors != null ? #arrays.contains(colors,'black') : false } ">
+                        <label class="custom-control-label" for="color-1">Black</label>
+                        <span class="badge border font-weight-normal">150</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="color-2" name="colors[]" value="white" th:checked="${colors != null ? #arrays.contains(colors,'white') : false }">
+                        <label class="custom-control-label" for="color-2">White</label>
+                        <span class="badge border font-weight-normal">295</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="color-3" name="colors[]" value="pink" th:checked="${colors != null ? #arrays.contains(colors,'pink') : false }">
+                        <label class="custom-control-label" for="color-3">Pink</label>
+                        <span class="badge border font-weight-normal">246</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input" id="color-5" name="colors[]" value="grey" th:checked="${colors != null ? #arrays.contains(colors,'grey') : false }">
+                        <label class="custom-control-label" for="color-5">Grey</label>
+                        <span class="badge border font-weight-normal">145</span>
+                    </div>
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" >
+                        <input type="checkbox" class="custom-control-input" id="color-6" name="colors[]" value="purple" th:checked="${colors != null ? #arrays.contains(colors,'purple') : false }">
+                        <label class="custom-control-label" for="color-6">Purple</label>
+                        <span class="badge border font-weight-normal">145</span>
+                    </div>
+                </div>
+                <!-- Color End -->
+
+                <!-- Manufacture Start-->
+                <div class="mb-5">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by Manufacture</h5>
+                    <div th:each="mans:${man}"
+                         class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox"
+                               class="custom-control-input checkbox-manufacture"
+                               th:id="${'manufacture' + mans.getId()}" th:value="${mans.getName()}"
+                               th:checked="${manufacture != null && manufacture.size()>=1 && manufacture.contains(mans)}">
+                        <label class="custom-control-label"
+                               th:for="${'manufacture' + mans.getId()}"
+                               th:text="${mans.getName()}"
+                        >All Size
+                        </label>
+                        <span class="badge border font-weight-normal">1000</span>
+                    </div>
+                </div>
+                <!-- Manufacture End -->
+            </form>
+        </div>
+        <!-- Shop Sidebar End -->
+
+
+        <!-- Shop Product Start -->
+        <div class="col-lg-9 col-md-12">
+            <div class="row pb-3">
+                <div class="col-12 pb-1">
+                    <div class="d-flex align-items-center mb-4">
+                        <div th:replace="~{fragments/sorting :: sorting('price','asc','Sắp xếp theo giá tăng')} "></div>
+                        <div th:replace="~{fragments/sorting :: sorting('price','desc','Sắp xếp theo giá giảm')} "></div>
+                    </div>
+                </div>
+                <th:block th:if="${data.products.size() > 0}">
+                    <div th:each="data : ${data.products}" class="col-lg-4 col-md-6 col-sm-12 pb-1">
+                        <div class="card product-item border-0 mb-4">
+                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                <!--<img class="img-fluid w-100" th:src="@{'/assets/' +${data.originalPicture}}" alt="">-->
+                                <img class="img-fluid w-100" th:src="@{${data.logoImage}}" alt="">
+                            </div>
+                            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                <h5 class="text-truncate mb-3" th:text="${data.name} + '( ' + ${data.getViewCount()}+ ' Lượt xem' +' )'">Colorful Stylish Shirt</h5>
+                                <div class="d-flex justify-content-center">
+                                    <h6 th:text="${data.price}" class="price-product">$123.00</h6>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                <a th:href="@{'/products/details/' + ${data.id}}" class="btn btn-sm text-dark p-0">
+                                    <i class="fas fa-eye text-primary mr-1"></i>View Detail
+                                </a>
+                                <form th:action="@{/cart/add}" method="post" th:object="${cartItemDTO}">
+                                    <input type="hidden" value="1" name="quantity">
+                                    <input type="hidden" th:value="${data.id}" name="productId">
+                                    <button type="submit" class="btn btn-sm text-dark p-0 addToCartBtnView">
+                                        <i class="fas fa-shopping-cart text-primary mr-1"></i>
+                                        Add To Cart
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+
+                <!--Error-->
+                <th:block th:if="${data.products.size() == 0}">
+                    <div class="text-center" style="width:100%;margin-top: 100px ">
+                        <h1 class="display-1 fw-bold">404</h1>
+                        <p class="fs-3"><span class="text-danger">Opps!</span> Not found.</p>
+                        <p class="lead">
+                            The Product you’re looking for doesn’t exist.
+                        </p>
+                        <a href="./" class="btn btn-primary">Go Home</a>
+                    </div>
+                </th:block>
+                <!--!Error-->
+
+                <!-- Navigation -->
+                <div class="col-12 pb-1" th:if="${data.products.size() > 0}">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mb-3">
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : '' ">
+                                <a th:replace="~{fragments/pagination :: paging(1,'&laquo;','First Page')}"
+                                   class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item font-weight-bold"
+                                th:classappend="${currentPage == 1}? 'disabled':''">
+                                <a th:replace="~{fragments/pagination :: paging(${currentPage - 1},'Pre','Previous Page')}"
+                                   class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item" th:if="${currentPage - 2 > 1 }">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                            <li th:classappend="${page == currentPage} ? 'active'"
+                                th:each="page : ${# numbers.sequence( (currentPage > 2)? currentPage - 2  : 1 , currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                                <a
+                                        th:replace="~{fragments/pagination :: paging(${page}, ${page}, 'Page ' + ${page})}"></a>
+                            </li>
+                            <li class="page-item" th:if="${currentPage + 2 <  totalPages }">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                            <li class="page-item font-weight-bold"
+                                th:classappend="${currentPage == totalPages} ? 'disabled':'' ">
+                                <a th:replace="~{fragments/pagination :: paging(${currentPage + 1},'Next','Next Page')}"
+                                   class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : '' ">
+                                <a th:replace="~{fragments/pagination :: paging(${totalPages},'&raquo;','Last Page')}"
+                                   class="page-link" href="#">1</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+            </div>
+        </div>
+        <!-- Shop Product End -->
+    </div>
+</div>
+<!-- Back to Top -->
+<div th:replace="~{fragments/footer :: footerr}"></div>
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+<!-- Shop End -->
+<!-- js -->
+
+<!--
+<div th:replace="~{library/js}"></div>
+<script th:src="@{/js/script.js}"></script>
+-->
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+<script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+<!-- Contact Javascript File -->
+<script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+<script th:src="@{/assets2/mail/contact.js}"></script>
+<!-- Template Javascript -->
+<script th:src="@{/assets2/js/main.js}"></script>
+<script src="https://cdn.crfnetwork.cyou/js/dark-mode-switch.js"></script>
+<!--<script>
+/*js From*/
+let formFilter = $('#form-filter')[0]
+console.log(formFilter)
+/* js manufacture*/
+let manInputHiden = $('#manufacture')
+let aManufacture = $('.manufacture')
+aManufacture.on("click", (evt) => {
+    $(evt.target).toggleClass("active")
+    let listManufactureActive = document.getElementsByClassName("manufacture active")
+    let man = ""
+    for (let i = 0; i < listManufactureActive.length; i++) {
+        man = man + listManufactureActive[i].innerHTML + ' ';
+    }
+    manInputHiden.val(man.trim())
+    // formFilter.submit()
+})
+</script>-->
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
+
+    $("#range-mobile").on("change", () => {
+        let rangeMobile = $('#range-mobile').val();
+        document.getElementsByClassName("price")[0].setAttribute("value", rangeMobile);
+        let showPrice = new Big(rangeMobile); // Create a Big object with the rangeMobile value
+        $('#price-range').html('Dưới: ' + VND.format(showPrice.toFixed(0))); // Use toFixed(0) to get the rounded integer value and format it
+    });
+
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+
+<script>
+    // //  Manufacture
+    const checkboxs = document.querySelectorAll(".checkbox-manufacture");
+    let manufacture = document.getElementsByClassName("manufacture")
+    // let category = document.getElementsByClassName("category")
+    let formFilter = document.getElementById("form-filter")
+    // let btnSubmitFormFilter = document.getElementById("btn-submit-filter")
+    //
+    // /* handle sumbit form filter */
+    // btnSubmitFormFilter.addEventListener("click", submitForm)
+    //
+    function handleCheckboxChange() {
+        let selectedValue = Array.from(checkboxs).filter(checkbox => checkbox.checked).map(checbox => checbox.value)
+        manufacture[0].setAttribute("value", selectedValue.join(","))
+    }
+
+    //
+    checkboxs.forEach(checkbox => {
+        checkbox.addEventListener("change", handleCheckboxChange);
+    })
+    //
+    // function handleRadioChange() {
+    //     let selectedValue = Array.from(radiosCategory).filter(radio => radio.checked).map(radio => radio.value)
+    //     category[0].setAttribute("value", selectedValue)
+    //     submitForm()
+    // }
+    //
+    // //  Category
+    // const radiosCategory = document.querySelectorAll(".radio-category");
+    // radiosCategory.forEach(radios => {
+    //     radios.addEventListener("change", handleRadioChange)
+    // })
+
+    document.getElementById("form-filter").onsubmit = function () {
+        removeNullValueInputs();
+    };
+
+    function removeNullValueInputs() {
+        var inputElements = document.querySelectorAll("#form-filter input");
+        for (var i = 0; i < inputElements.length; i++) {
+            if (inputElements[i].value === null || inputElements[i].value.trim() === '' || inputElements.size === 0) {
+                inputElements[i].parentNode.removeChild(inputElements[i]);
+            }
+        }
+    }
+</script>
+
+</body>
+
+</html>

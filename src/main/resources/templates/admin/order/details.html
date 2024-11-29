@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10">
+            <section class="h-80 gradient-custom">
+                <div class="container h-100">
+                    <div class="row d-flex h-100">
+                        <div class="col-12">
+                            <div class="card" style="border-radius: 10px;">
+                                <div class="card-header">
+                                    <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: #a8729a;">Anna</span>!
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
+                                        <!--<p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>-->
+                                    </div>
+                                    <div th:each="orderDetailDTO : ${orderDetailDTOS}">
+                                        <div class="card shadow-0 border mb-4">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <img th:src="@{'/upload/products/' + ${orderDetailDTO.getUrl()}}"
+                                                             class="img-fluid" alt="Phone">
+                                                    </div>
+                                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0"
+                                                           th:text="${orderDetailDTO.getNameProduct()}">Samsung
+                                                            Galaxy</p>
+                                                    </div>
+                                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small"
+                                                           th:text="${orderDetailDTO.getColor()}">White</p>
+                                                    </div>
+                                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small">Capacity: 64GB</p>
+                                                    </div>
+                                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small"
+                                                           th:text="${'Qty:' + orderDetailDTO.getQuantity() +' products'}">
+                                                            Qty: 1</p>
+                                                    </div>
+                                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small price-product"
+                                                           th:text="${orderDetailDTO.getPriceProduct()}">$499</p>
+                                                    </div>
+                                                </div>
+                                                <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between pt-2">
+                                        <p class="fw-bold mb-0">Order Details</p>
+                                        <p class="text-muted mb-0 price-product" th:text="${orderDTO.getTotal()}"><span
+                                                class="fw-bold me-4">Total</span> $898.00</p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between pt-2">
+                                        <p class="text-muted mb-0"
+                                           th:text="${'Invoice Number : HD00' + orderDTO.getIdOrder()}">Invoice Number :
+                                            HD00[[${idOrder}]]</p>
+                                        <!--<p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p>-->
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-muted mb-0"
+                                           th:text="${'Invoice Date : ' + #dates.format(orderDTO.getDate(),'dd-MM-YYYY')}">
+                                            Invoice Date : 22 Dec,2019</p>
+                                        <!--<p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>-->
+                                    </div>
+
+                                    <!--<div class="d-flex justify-content-between mb-5">
+                                        <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
+                                        <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span>
+                                            Free</p>
+                                    </div>-->
+                                </div>
+                                <div class="card-footer border-0 px-4 py-5"
+                                     style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                    <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
+                                        Total
+                                        paid: <span class="h2 mb-0 ms-2 price-product   " th:text="${orderDTO.getTotal()}">$1040</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+
+</body>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+</html>

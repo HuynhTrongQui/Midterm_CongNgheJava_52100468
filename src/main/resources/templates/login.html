@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Trang đăng nhập</title>
+    <link rel="icon" href="/assets/phone.png" type="image/x-icon">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- start #header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- end #header -->
+
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Login Account</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a th:href="@{/}">Home</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Login</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3">
+        </div>
+        <div class="col-6">
+            <div class="col-12 mb-2">
+                <div>
+                    <a class="col-5 p-2 btn" style="background-color: #e71930;color: white"
+                       th:href="@{/oauth2/authorization/google}">
+                        <i class="fab fa-google"></i>
+                        Login with Google
+                    </a>
+                    <a class="col-5 p-2 btn" style="background-color:#106ebe;color: white"
+                       th:href="@{/oauth2/authorization/facebook}">
+                        <i class="fab fa-facebook-f"></i>
+                        Login with Facebook
+                    </a>
+                </div>
+            </div>
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username (*)</label>
+                    <input id="username" name="username" type="text" rules="required|min:3|max:10"
+                           placeholder="Nhập tên đăng nhập của bạn" class="form-control">
+                    <span class="form-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password (*)</label>
+                    <input id="password" name="password" type="password" rules="required|min:3"
+                           placeholder="Nhập mật khẩu" class="form-control">
+                    <span class="form-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Remember me </label>
+                    <input id="remmember" name="remember-me" type="checkbox">
+                </div>
+                <!--Message-->
+                <div class="alert alert-success" role="alert" th:if="${logoutMessage}">
+                    <h2 th:text="${logoutMessage}"></h2>
+                </div>
+                <div class="alert alert-danger" role="alert" th:if="${errorLogin}">
+                    <h2 th:text="${errorLogin}"></h2>
+                </div>
+                <div class="alert alert-success" role="alert" th:if="${successMessage}">
+                    <h2 th:text="${successMessage}"></h2>
+                </div>
+                <div class="alert alert-danger" role="alert" th:if="${isEnable}">Tài khoản của bạn hiện đang bị khóa!
+                    Vui lòng liên hệ sau.
+                </div>
+                <button class="form-submit col-12 p-2" name="login-submit"
+                        style="background-color: #D19C97;color: white">
+                    Sign in
+                </button>
+                <p class="desc" style="display:inline;">Forgot password <a th:href="@{/forgot}">Forgot</a></p><br>
+                <p class="desc" style="display:inline;">Don't have an account? <a href="/register">Sign up</a></p>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footerr}"></div>
+<!--!Footer-->
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+<!-- Contact Javascript File -->
+<script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+<script th:src="@{/assets2/mail/contact.js}"></script>
+
+<!-- Template Javascript -->
+<script th:src="@{/assets2/js/main.js}"></script>
+
+<script>
+    if ($('.alert') != null) {
+        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+            $(".alert").slideUp(500);
+        });
+    }
+</script>
+
+</body>
+
+
+</html>

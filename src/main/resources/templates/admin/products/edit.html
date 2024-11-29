@@ -1,0 +1,157 @@
+    <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trang danh sach san pham</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .limited-text {
+            max-width: 200px;
+            /* Adjust this value as needed */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+        }
+
+        .container {
+          max-width: 600px;
+          margin: 50px auto;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 5px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        form label {
+          display: inline-block;
+          width: 100px;
+          font-weight: bold;
+          margin-right: 10px;
+        }
+
+        form input {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+
+        form input[type="submit"] {
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          cursor: pointer;
+        }
+
+        a {
+          display: block;
+          margin-top: 15px;
+          text-align: center;
+        }
+    </style>
+</head>
+
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10">
+            <section class="content">
+                <div class="container">
+                    <h1>Edit Product</h1>
+                    <form th:action="@{/admin/products/update}" th:object="${product}" method="post" enctype="multipart/form-data">
+                        <label for="id">Id:</label>
+                        <input type="text" th:field="*{id}" id="id" readonly>
+                        <label for="name">Name:</label>
+                        <input type="text" th:field="*{name}" id="name">
+                        <label for="price">Price:</label>
+                        <input type="text" th:field="*{price}" id="price">
+                        <label for="color">Color:</label>
+                        <input type="text" th:field="*{color}" id="color">
+                        <label for="description">Description:</label>
+                        <input type="text" th:field="*{description}" id="description">
+                        <label for="information">Information:</label>
+                        <input type="text" th:field="*{information}" id="information">
+
+                        <label for="formFileLg">Image</label>
+                        <input id="formFileLg" type="file" accept="image/*" name="image">
+
+                        <label for="size">Size:</label>
+                        <input type="text" th:field="*{size}" id="size">
+
+                        <div>
+                            <label for="categoryName">Category Name:</label>
+                            <select id="categoryName" name="categoryName" required>
+                                <!--            <option th:value="${product.category.name}" th:text="${product.category.name}"></option>-->
+                                <th:block th:each="category : ${categories}">
+                                    <option th:text="${category.name}"
+                                            th:value="${category.name}"
+                                            th:selected="${category.name ==  product.category.name.trim()}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="manufactureName">Manufacture Name:</label>
+                            <div>
+                                <select id="manufactureName" name="manufactureName" multiple required>
+                                    <!--<option th:value="${product.manufacture}" th:text="${product.manufacture}"></option>-->
+                                    <th:block th:each="manufactureName : ${manufacturesName}">
+                                        <option
+                                                th:value="${manufactureName.name}"
+                                                th:selected="${#sets.contains(product.manufacture,manufactureName)}"
+                                                th:text="${manufactureName.name}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Other fields here -->
+                        <input type="submit" value="Save">
+                    </form>
+                    <a th:href="@{/admin/products/list}">Back to List</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+</html>

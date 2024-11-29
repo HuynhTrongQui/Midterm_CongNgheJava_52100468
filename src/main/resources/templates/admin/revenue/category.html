@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trang quản trị viên</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <script th:inline="javascript">
+        window.onload = function () {
+            var dps = [];
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                exportEnabled: true,
+                title: {
+                    text: "Doanh thu theo loại sản phẩm"
+                },
+                data: [{
+                    type: "pie",
+                    yValueFormatString: "#,###\"%\"",
+                    showInLegend: true,
+                    indexLabel: "{y}",
+                    indexLabelPlacement: "inside",
+                    dataPoints: dps
+                }]
+            });
+
+            var yValue;
+            var name;
+
+            var dataPointsList = /*[[${dataPointsList}]]*/[];
+            for (var i = 0; i < dataPointsList.length; i++) {
+                for (var j = 0; j < dataPointsList[i].length; j++) {
+                    yValue = parseFloat(dataPointsList[i][j].y);
+                    name = dataPointsList[i][j].name;
+                    dps.push({
+                        name: name,
+                        y: yValue
+                    });
+                }
+            }
+
+            chart.render();
+        }
+    </script>
+
+
+</head>
+
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10">
+            <div class="card">
+                <div class="card-header bg-danger">Tổng hợp theo loại sản phẩm</div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr class="table-success">
+                            <th scope="col">Loại sản phẩm</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Doanh số</th>
+                            <th scope="col">Giá bán thấp nhất</th>
+                            <th scope="col">Giá bán cao nhất</th>
+                            <th scope="col">Trung bình</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="data : ${category}">
+                            <th scope="row" th:text="${data.nameCategory}">1</th>
+                            <td th:text="${data.quantity}">Mark</td>
+                            <td th:text="${data.total}" class="price-product">Otto</td>
+                            <td th:text="${data.priceMin}" class="price-product">@mdo</td>
+                            <td th:text="${data.priceMax}" class="price-product">@mdo</td>
+                            <td th:text="${data.gpa}" class="price-product">@mdo</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr class="table-success">
+                            <th scope="col">Loại sản phẩm</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Doanh số</th>
+                            <th scope="col">Giá bán thấp nhất</th>
+                            <th scope="col">Giá bán cao nhất</th>
+                            <th scope="col">Trung bình</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!--<script th:src="@{/admin/dist/js/pages/dashboard.js}"></script>-->
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+</html>

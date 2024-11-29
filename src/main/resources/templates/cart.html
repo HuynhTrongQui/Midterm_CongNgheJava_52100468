@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>EShopper - Bootstrap Shop Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+<body>
+<!-- start #header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- end #header -->
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="">Home</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Shopping Cart</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Cart Start -->
+<input type="hidden" th:value="${idCart}" id="idCart">
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-bordered text-center mb-0">
+                <thead class="bg-secondary text-dark">
+                <tr>
+                    <th>Products</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody class="align-middle" id="productList">
+                <tr th:each="cartItem : ${cartItems}" th:id="${cartItem.productId}">
+                    <td class="align-middle" style="text-align: left">
+                        <!-- ... product image and name ... -->
+                        <img th:src="@{${cartItem.productOriginalPicture}}"
+                             alt="" style="width: 50px;">
+                        [[${cartItem.productName}]]
+                    </td>
+                    <td class="align-middle price price-product" th:data-tag="${cartItem.getProductPrice()}">
+                        [[${cartItem.getProductPrice()}]]
+                    </td>
+                    <td class="align-middle">
+                        <div class="input-group quantity-cell mx-auto" style="width: 100px;">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-primary btn-minus" th:if="${cookie}"
+                                        onclick="getTableRowDataCookie(this)">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button class="btn btn-sm btn-primary btn-minus" th:if="${cookie == null}"
+                                        onclick="getTableRowData(this)">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control form-control-sm bg-secondary text-center "
+                                   th:value="${cartItem.quantity}" onchange="getTableRowData(this)">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-primary btn-plus" th:if="${cookie}"
+                                        onclick="getTableRowDataCookie(this)">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                                <button class="btn btn-sm btn-primary btn-plus" th:if="${cookie==null}"
+                                        onclick="getTableRowData(this)">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="align-middle total price-product" th:id="${cartItem.productId}"
+                        th:text="${cartItem.getQuantity() * cartItem.getProductPrice()}"></td>
+                    <td class="align-middle">
+                        <button class="btn btn-sm btn-primary open-DeleteDialog"
+                                data-toggle="modal" data-target="#modalDelete" th:data-id="${cartItem.productId}"
+                                th:data-name="${cartItem.getProductName()}">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4" th:if="${cookie == null}">
+            <!--<form class="mb-5" action="">
+                <div class="input-group">
+                    <input type="text" class="form-control p-4" placeholder="Coupon Code">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">Apply Coupon</button>
+                    </div>
+                </div>
+            </form>-->
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                </div>
+                <div class="card-body">
+                    <!-- <div class="d-flex justify-content-between mb-3 pt-1">
+                         <h6 class="font-weight-medium">Subtotal</h6>
+                         <h6 class="font-weight-medium price-product" th:text="${total}"></h6>
+                     </div>
+                     <div class="d-flex justify-content-between">
+                         <h6 class="font-weight-medium">Shipping</h6>
+                         <h6 class="font-weight-medium">$10</h6>
+                     </div>-->
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <h5 class="font-weight-bold  price-product" th:text="${total}" id="total"></h5>
+                    </div>
+                    <form th:action="@{/checkout}" method="get">
+                        <button class="btn btn-block btn-primary my-3 py-3">Checkout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ... cart summary content ... -->
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="deleteProductCart(this)" tag="">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart End -->
+<!-- footer -->
+<div th:replace="~{fragments/footer :: footerr}"></div>
+<!-- ! footer-->
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+<!-- Contact Javascript File -->
+<script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+<script th:src="@{/assets2/mail/contact.js}"></script>
+<!-- Template Javascript -->
+<script th:src="@{/assets2/js/main.js}"></script>
+
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+
+<script>
+    let trs = document.querySelectorAll('#productList tr');
+    let idCart = document.getElementById('idCart').value;
+
+    function getTableRowDataCookie(button) {
+        let row = button.closest('tr');
+        let productId = parseInt(row.getAttribute('id'));
+        let quantityRequest = 0;
+        if (button.classList.contains('btn-minus')) {
+            if (parseInt(row.querySelector('input[type="text"]').value) >= 2) {
+                addToCart(productId,-1)
+                row.querySelector('input[type="text"]').value = parseInt(row.querySelector('input[type="text"]').value) - 1;
+                let price = parseFloat(row.querySelector('.price').getAttribute('data-tag'));
+                let quantity = parseInt(row.querySelector('input[type="text"]').value);
+                let total = price * quantity;
+                row.querySelector('.total').innerText = VND.format(total.toFixed(0)).replace("₫", "VNĐ");
+                quantityRequest = quantity
+            }
+            if (parseInt(row.querySelector('input[type="text"]').value) == 1) {
+                quantityRequest = 1;
+            }
+        } else if (button.classList.contains('btn-plus')) {
+            addToCart(productId,1)
+            row.querySelector('input[type="text"]').value = parseInt(row.querySelector('input[type="text"]').value) + 1;
+            let price = parseFloat(row.querySelector('.price').getAttribute('data-tag'))
+            let quantity = parseInt(row.querySelector('input[type="text"]').value);
+            let total = price * quantity;
+            row.querySelector('.total').innerText = VND.format(total.toFixed(0)).replace("₫", "VNĐ");
+            quantityRequest = quantity
+        } else {
+            row.querySelector('input[type="text"]').value = parseInt(row.querySelector('input[type="text"]').value) + 0;
+            let price = parseFloat(row.querySelector('.price').getAttribute('data-tag'))
+            let quantity = parseInt(row.querySelector('input[type="text"]').value);
+            let total = price * quantity;
+            row.querySelector('.total').innerText = VND.format(total.toFixed(0)).replace("₫", "VNĐ");
+            quantityRequest = quantity
+        }
+    }
+
+    function getTableRowData(button) {
+        let row = button.closest('tr');
+        let productId = parseInt(row.getAttribute('id'));
+        let quantityRequest = 0;
+        if (button.classList.contains('btn-minus')) {
+            if (parseInt(row.querySelector('input[type="text"]').value) >= 2) {
+                row.querySelector('input[type="text"]').value = parseInt(row.querySelector('input[type="text"]').value) - 1;
+                let price = parseFloat(row.querySelector('.price').getAttribute('data-tag'));
+                let quantity = parseInt(row.querySelector('input[type="text"]').value);
+                let total = price * quantity;
+                row.querySelector('.total').innerText = VND.format(total.toFixed(0)).replace("₫", "VNĐ");
+                quantityRequest = quantity
+            }
+            if (parseInt(row.querySelector('input[type="text"]').value) == 1) {
+                quantityRequest = 1;
+            }
+        } else if (button.classList.contains('btn-plus')) {
+            row.querySelector('input[type="text"]').value = parseInt(row.querySelector('input[type="text"]').value) + 1;
+            let price = parseFloat(row.querySelector('.price').getAttribute('data-tag'))
+            let quantity = parseInt(row.querySelector('input[type="text"]').value);
+            let total = price * quantity;
+            row.querySelector('.total').innerText = VND.format(total.toFixed(0)).replace("₫", "VNĐ");
+            quantityRequest = quantity
+        } else {
+            row.querySelector('input[type="text"]').value = parseInt(row.querySelector('input[type="text"]').value) + 0;
+            let price = parseFloat(row.querySelector('.price').getAttribute('data-tag'))
+            let quantity = parseInt(row.querySelector('input[type="text"]').value);
+            let total = price * quantity;
+            row.querySelector('.total').innerText = VND.format(total.toFixed(0)).replace("₫", "VNĐ");
+            quantityRequest = quantity
+        }
+        try {
+            fetch(`/api/carts/${idCart}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: quantityRequest
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    document.getElementById('total').innerText = VND.format(data.data.total.toFixed(0)).replace("₫", "VNĐ");
+                    ;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+</script>
+<script>
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
+    let priceProduct = document.querySelectorAll('.price-product');
+    priceProduct.forEach(function (element) {
+        let priceValue = new Big(element.textContent.trim());
+        element.innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ");
+    });
+</script>
+<script>
+    $(document).on("click", ".open-DeleteDialog", function () {
+        var Id = $(this).data('id');
+        var myProductName = $(this).data('name');
+        $(".modal-body").html(`Confirm delete product name <i style="color:red">${myProductName}</i> in the cart ? `)
+        $('#btnDelete').attr('tag', Id);
+    });
+
+    function deleteProductCart(buttonElement) {
+        /*call api*/
+        var id = buttonElement.getAttribute('tag');
+        try {
+            fetch(`/api/carts/${idCart}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(`${id}`)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    var trN = $(`tr#${id}`).remove();
+                    document.getElementById('total').innerText = VND.format(data.data.total.toFixed(0)).replace("₫", "VNĐ");
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    function addToCart(productId, quantity) {
+        var cart = getCookie("cart");
+        if (!cart) {
+            cart = {};
+        } else {
+            var decodedCart = atob(cart);
+            cart = JSON.parse(decodedCart);
+        }
+        let flag = false;
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].productId === productId) {
+                cart[i].quantity += quantity;
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            cart[i + 1] = {
+                productId: productId,
+                quantity: quantity
+            }
+        }
+        var encodedCartString = btoa(JSON.stringify(cart));
+        setCookie("cart", encodedCartString, 1);
+    }
+
+    function setCookie(name, value, days) {
+        var expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + days);
+        var expires = "expires=" + expirationDate.toUTCString();
+        document.cookie = name + "=" + value + "; " + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                return cookie.substring(name.length + 1);
+            }
+        }
+        return null; // Cookie not found
+    }
+</script>
+<!-- cart
+<script>
+    let aCart = document.getElementById("cart");
+    let formCart = document.getElementById("form-cart");
+    aCart.addEventListener("click", function (evt) {
+        evt.preventDefault();
+        formCart.submit();
+    })
+</script>-->
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+<a th:fragment="paging(pagNum,title,tooltip)" th:href="@{'?'
+                                       +${keyword != null && keyword != '' ? 'keyword='  + keyword + '&' : ''}
+                                       +${manufacture != null && manufacture!= '' ? 'manufacture=' + valueMan +'&' :  ''}
+                                       +${category_filter != null  && category_filter!= '' ? 'category=' + category_filter + '&':''}
+                                       +'currentPage='+${pagNum}
+                                       +'&pageSize='+ ${pageSize}
+                                       +'&sortBy=' + ${sortBy}
+                                       +'&orderField=' + ${orderField}
+   }" class="page-link" th:title="${tooltip}">
+    [[${title}]]
+</a>

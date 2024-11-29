@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10" style="padding:  0;">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <h3 class="card-title">List Order</h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control float-right"
+                                   placeholder="Search">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Tên Khách Hàng</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Ngày lập hóa đơn</th>
+                            <th scope="col">Địa chỉ nhận hàng</th>
+                            <th scope="col">Số điện thoại</th>
+                            <th scope="col">Trạng Thái</th>
+                            <th scope="col">Xem chi tiết</th>
+                            <th scope="col">In hóa đơn</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody style="font-size:14px">
+                        <tr th:each="order  : ${orders}">
+                            <th scope="row" th:text="${orderStat.index + (currentPage - 1) * pageSize + 1}">
+                                1
+                            </th>
+                            <th scope="row" th:text="${'HD00' + order.getIdOrder()}">1</th>
+                            <td th:text="${order.nameUser}">Huy Hoa</td>
+                            <td th:text="${order.getTotal()}" class="price-product">100000</td>
+                            <td th:text="${#dates.format(order.getDate(),'dd-MM-yyyy')}"></td>
+                            <td
+                                    th:text="${order.getAddress() != null ? order.getAddress : 'Không xác định'}">
+                            </td>
+                            <td th:text="${order.getPhone() != null ? order.getPhone :'Không xác định' }">
+                            </td>
+                            <th>
+                                            <span class="label label-default"
+                                                  th:if="${order.getStatus() == T(com.project.spring.enums.OrderStatus).PENDING}">Pending</span>
+                                <span class="label label-warning"
+                                      th:if="${order.getStatus() == T(com.project.spring.enums.OrderStatus).PROCESSING}">Processing</span>
+                                <span class="label label-primary"
+                                      th:if="${order.getStatus() == T(com.project.spring.enums.OrderStatus).DELIVERED}">Delivered</span>
+                                <span class="label label-danger"
+                                      th:if="${order.getStatus() == T(com.project.spring.enums.OrderStatus).CANCELLED}">Cancelled</span>
+                                <span class="label label-success" style="background-color: green"
+                                      th:if="${order.getStatus() == T(com.project.spring.enums.OrderStatus).COMPLETED}">Completed</span>
+                            </th>
+                            <td>
+                                <a class="label label-info"
+                                   th:href="@{'/admin/order/details/' + ${order.getIdOrder()}}">
+                                    <i class="fa fa-light fa-info"></i> &nbsp;Xem chi tiết đơn hàng
+                                </a>
+                            </td>
+                            <td>
+                                <a th:href="@{'/admin/report/order/'+${order.idOrder}+'/pdf'}">In hóa đơn
+                                </a>
+                            </td>
+                            <td>
+                                <a th:href="@{'/admin/order/edit/' + ${order.getIdOrder()}}" type="button"
+                                   class="btn btn-warning">
+                                    <i class="fa fa-solid fa-pen-fancy"></i>
+                                    Update order
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Tên Khách Hàng</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Ngày lập hóa đơn</th>
+                            <th scope="col">Địa chỉ nhận hàng</th>
+                            <th scope="col">Số điện thoại</th>
+                            <th scope="col">Trạng Thái</th>
+                            <th scope="col">Xem chi tiết</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="card-footer clearfix" style="">
+                    <ul class="pagination justify-content-center mb-3">
+                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : '' ">
+                            <a th:replace="~{fragments/pagination :: paging(1,'&laquo;','First Page')}"
+                               class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item font-weight-bold"
+                            th:classappend="${currentPage == 1}? 'disabled':''">
+                            <a th:replace="~{fragments/pagination :: paging(${currentPage - 1},'Pre','Previous Page')}"
+                               class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item" th:if="${currentPage - 2 > 1 }">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                        <li th:classappend="${page == currentPage} ? 'active'"
+                            th:each="page : ${#numbers.sequence( (currentPage > 2)? currentPage - 2  : 1 , currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                            <a
+                                    th:replace="~{fragments/pagination :: paging(${page}, ${page}, 'Page ' + ${page})}"></a>
+                        </li>
+                        <li class="page-item" th:if="${currentPage + 2 <  totalPages }">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                        <li class="page-item font-weight-bold"
+                            th:classappend="${currentPage == totalPages} ? 'disabled':'' ">
+                            <a th:replace="~{fragments/pagination :: paging(${currentPage + 1},'Next','Next Page')}"
+                               class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : '' ">
+                            <a th:replace="~{fragments/pagination :: paging(${totalPages},'&raquo;','Last Page')}"
+                               class="page-link" href="#">1</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                <form method="post" id="form-delete-order">
+                    <button type="submit" class="btn btn-danger" id="btnDelete">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+
+<!--
+<script>
+$(document).on("click", ".open-DeleteDialog", function () {
+    let Id = $(this).data('id');
+    let nameCustomer = $(this).data('name');
+    $(".modal-body").html(`Confirm delete order:HD00<i style="color:red">${Id}</i> with name customer  ? <i style="color:red">${nameCustomer}</i>`)
+    $('#form-delete-order').attr('action', `/admin/order/delete/${Id}`);
+});
+</script>
+-->
+
+</html>

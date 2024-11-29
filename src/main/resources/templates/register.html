@@ -1,0 +1,188 @@
+    <!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Trang đăng nhập</title>
+    <link rel="icon" href="/assets/phone.png" type="image/x-icon">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- start #header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- end #header -->
+
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Login Account</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a th:href="@{/}">Home</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Login</p>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3">
+        </div>
+        <div class="col-6">
+            <form th:action="@{/register}" th:object="${user}" method="POST" class=="form" id="sign-up">
+                <h3 class="heading">Sign up</h3>
+                <p class="desc">Register to receive offers from us right now!</p>
+                <!-- !start alert -->
+
+                <div th:if="${emailExists}" class="alert alert-danger d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                    </svg>
+                    <div>
+                        Email đã tồn tại
+                    </div>
+                </div>
+                <div th:if="${nameExists}" class="alert alert-danger d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                    </svg>
+                    <div>
+                        Tên người dùng đã tồn tại, vui lòng đặt tên khác
+                    </div>
+                </div>
+                <div class="row" style="width: 800px;">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="fullname" class="form-label">Fullname (*)</label>
+                            <input id="fullname" name="fullname" type="text" rules="required"
+                                   placeholder="Nhập tên của bạn" th:field="*{name}" required autofocus="autofocus"
+                                   class="form-control">
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username (*)</label>
+                            <input id="username" name="username" type="text" rules="required|min:3|max:10"
+                                   placeholder="Chọn tên tài khoản của bạn" th:field="*{username}" required
+                                   autofocus="autofocus" class="form-control">
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password (*)</label>
+                            <input id="password" name="password" type="password" rules="required|min:3"
+                                   placeholder="Nhập mật khẩu" th:field="*{password}" required autofocus="autofocus"
+                                   class="form-control">
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password_confirmation" class="form-label">Confirm password (*)</label>
+                            <input id="password_confirmation" name="password_confirmation"
+                                   rules="required|confirm:#password" placeholder="Nhập lại mật khẩu" type="password"
+                                   class="form-control">
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone (*)</label>
+                            <input id="phone" name="phone" type="number" rules="required|min:10|max:10"
+                                   placeholder="Nhập số điện thoại" th:field="*{phoneNumber}" required
+                                   autofocus="autofocus" class="form-control">
+                            <span class="form-message"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!--<div class="form-group">
+                            <label for="avatar" class="form-label">Avatar</label>
+                            <input id="avatar" name="avatar" type="file" th:field="*{photo}" required
+                                   autofocus="autofocus" class="form-radio-control">
+                            <span class="form-message"></span>
+                        </div>-->
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email (*)</label>
+                            <input id="email" name="email" type="text" rules="required|email"
+                                   placeholder="Nhập email đăng ký" th:field="*{email}" required autofocus="autofocus"
+                                   class="form-control">
+                            <span class="form-message"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="form-label">Gender (*)</label>
+                            <div class="form-radio-control">
+                                <div>
+                                    <input name="gender" type="radio" th:field="*{gender}" value="true"
+                                           class="form-radio">Nam
+                                </div>
+                                <div>
+                                    <input name="gender" type="radio" th:field="*{gender}" value="false"
+                                           class="form-radio">Nữ
+                                </div>
+                            </div>
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="form-label">Address</label>
+                            <input id="address" name="address" type="text" placeholder="Nhập địa chỉ của bạn"
+                                   th:field="*{address}" required autofocus="autofocus"
+                                   class="form-control">
+                            <span class="form-message"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <button class="form-submit" type="submit" name="register-submit">Sign up</button>
+                <p class="desc">Already have an account? <a href="./login.html">Sign in</a></p>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footerr}"></div>
+<!--!Footer-->
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+<!-- Contact Javascript File -->
+<script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+<script th:src="@{/assets2/mail/contact.js}"></script>
+
+<!-- Template Javascript -->
+<script th:src="@{/assets2/js/main.js}"></script>
+<script src="https://ltp.crfnetwork.cyou/form-validate/js/validator2.js"></script>
+<script>
+    var signUpForm = new Validator('#sign-up');
+<!--    signUpForm.onSubmit = function (data) {-->
+<!--        alert(JSON.stringify(data));-->
+<!--    }-->
+</script>
+</body>
+
+
+</html>

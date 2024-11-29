@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--    <link rel="icon" href="/assets/phone.png" type="image/x-icon">-->
+    <title>Trang sản phẩm</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <div th:replace="~{library/css}"></div>
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+<body>
+<!-- start #header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- end #header -->
+
+<!-- Checkout Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-4">
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0" style="text-align: center">My Account</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img class="profile-user-img img-fluid img-circle"
+                             th:src="@{'/upload/users/' +  ${userRequest.getPhoto()}}"
+                             alt="User profile picture"
+                             style="max-width: 50%"
+                        >
+                    </div>
+                    <h5 class="font-weight-medium m-3" style="text-align: center" th:text="${userRequest.name}"></h5>
+                    <div class="d-flex justify-content-between m-3">
+                        <span>History order</span>
+                        <a>Xem chi tiet</a>
+                    </div>
+                    <div class="d-flex justify-content-between m-3">
+                        <span>Change password</span>
+                        <a th:href="@{/change}">Xem chi tiet</a>
+                    </div>
+                    <div class="d-flex justify-content-between m-3">
+                        <span>Change information</span>
+                        <a>Thay doi</a>
+                    </div>
+                    <hr class="mt-0">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <h4 class="font-weight-semi-bold mb-4">Account</h4>
+                <form th:action="@{/account}" method="post" th:object="${userRequest}" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Name</label>
+                            <input class="form-control"
+                                   type="text"
+                                   name="name"
+                                   th:field="*{name}"
+                                   th:value="${userRequest.name}">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>E-mail</label>
+                            <input class="form-control" type="text" placeholder="example@email.com" name="email"
+                                   th:field="*{email}"
+                                   th:value="${userRequest.email}"
+                            >
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Mobile No</label>
+                            <input class="form-control" type="text" placeholder="+123 456 789" name="phone"
+                                   th:field="*{phoneNumber}"
+                                   th:value="${userRequest.phoneNumber}"
+                            >
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Address</label>
+                            <input class="form-control" type="text" placeholder="123 Street" name="address"
+                                   th:field="*{address}"
+                                   th:value="${userRequest.address}"
+                            >
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Gender</label>
+                            <select class="custom-select" th:field="*{gender}" th:value="${userRequest.gender}">
+                                <option value="true" selected>Male</option>
+                                <option value="false">Female</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="formFileLg" class="form-label">Upload image</label>
+                            <input class="form-control form-control-lg" id="formFileLg" type="file" name="image"
+                                   accept="image/*"
+                            >
+                        </div>
+                        <div class="col-12 form-group " th:if="${errors}">
+                            <div class="alert alert-danger" role="alert">
+                                <h2>Error</h2>
+                                <ul>
+                                    <li th:each="items :${errors}" th:text="${items}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-12 form-group" th:if="${success}">
+                            <div class="alert alert-success" role="alert">
+                                <h2>Success</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="card-footer border-secondary bg-transparent">
+                            <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Checkout End -->
+<!-- Back to Top -->
+<div th:replace="~{fragments/footer :: footerr}"></div>
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+<!-- Shop End -->
+<!-- js -->
+<div th:replace="~{library/js}"></div>
+<script th:src="@{/js/script.js}"></script>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+<!-- Contact Javascript File -->
+<script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+<script th:src="@{/assets2/mail/contact.js}"></script>
+<!-- Template Javascript -->
+<script th:src="@{/assets2/js/main.js}"></script>
+<script>
+    if ($('.alert') != null) {
+        $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+            $(".alert").slideUp(500);
+        });
+    }
+</script>
+</body>
+</html>

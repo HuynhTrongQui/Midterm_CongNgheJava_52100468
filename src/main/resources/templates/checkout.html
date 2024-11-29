@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Check out </title>
+    <link rel="icon" href="/assets/phone.png" type="image/x-icon">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Checkout</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Checkout</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Checkout Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-6">
+                <img src="https://www.picserver.org/highway-signs2/images/orders.jpg" style="width: inherit">
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="font-weight-medium mb-3">Products</h5>
+                        <div th:each="p : ${cartItems}">
+                            <!--<div class="d-flex justify-content-between">
+                            <p th:text="${p.getProductName()}"></p>
+                            <p class="price-product" th:text="${p.getProductPrice()}"></p>
+                            <p th:text="'x'+${p.quantity}"></p>
+                        </div>-->
+                            <div class="row">
+                                <div class="col-7">
+                                    <p th:text="${p.getProductName()}"></p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="price-product" th:text="${p.getProductPrice()}"></p>
+                                </div>
+                                <div class="col-1">
+                                    <p th:text="'x'+${p.quantity}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mt-0">
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">Subtotal</h6>
+                            <h6 class="font-weight-medium price-product" th:text="${total}"></h6>
+                        </div>
+                        <!-- <div class="d-flex justify-content-between">
+                         <h6 class="font-weight-medium">Shipping</h6>
+                         <h6 class="font-weight-medium">$10</h6>
+                     </div>-->
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold price-product" th:text="${total}"></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-secondary mb-5">
+                    <form method="post" th:action="@{/checkout}">
+                        <input type="hidden" name="amount" th:value="${total}">
+                        <div class="card-header bg-secondary border-0">
+                            <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" name="payment" id="paypal" value="paypal">
+                                    <label class="custom-control-label" for="paypal">Paypal</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" name="payment" id="directcheck" value="direct">
+                                    <label class="custom-control-label" for="directcheck">Direct Check</label>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" name="payment" id="banktransfer" value="bank">
+                                    <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer border-secondary bg-transparent">
+                            <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"
+                                th:disabled="${total == 0 ? true : false }">Place Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Checkout End -->
+
+
+    <!-- Footer Start -->
+    <div th:replace="~{fragments/footer :: footerr}"></div>
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+    <!-- Contact Javascript File -->
+    <script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+    <script th:src="@{/assets2/mail/contact.js}"></script>
+
+    <!-- Template Javascript -->
+    <script th:src="@{/assets2/js/main.js}"></script>
+
+    <!--    Big -->
+    <script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+    <script>
+        // Replace the existing code to use Big objects
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        let priceProduct = $('.price-product');
+        for (let i = 0; i < priceProduct.length; i++) {
+            let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+            priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+        }
+    </script>
+</body>
+
+</html>

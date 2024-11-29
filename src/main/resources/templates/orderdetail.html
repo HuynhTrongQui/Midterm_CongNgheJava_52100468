@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--    <link rel="icon" href="/assets/phone.png" type="image/x-icon">-->
+    <title>Trang lich su don hang</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <div th:replace="~{library/css}"></div>
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+<body>
+<!-- start #header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- end #header -->
+
+<div class="container-fluid" style="margin-top:20px">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Stt</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="orderdetail,iterStat :${orderdetails}">
+                    <th scope="row" th:text="${iterStat.index+1}"></th>
+                    <td th:text="${ 'HD' + orderdetail.getNameProduct()}"></td>
+                    <td class="price-product" th:text="${orderdetail.getPriceProduct()}"></td>
+                    <td th:text="${orderdetail.getQuantity()}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <a  th:href="@{/orders}">Back</a>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <span th:text="${'Date: ' + #dates.format(order.getDate(), 'dd-MM-yyyy')}"></span>
+                    </div>
+                    <div>
+                        <span>Total:</span>
+                        <span class="font-weight-medium mb-3 price-product" th:text="${order.getTotal()}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footerr}"></div>
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+<!-- Shop End -->
+<!-- js -->
+<div th:replace="~{library/js}"></div>
+<script th:src="@{/js/script.js}"></script>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+<!-- Contact Javascript File -->
+<script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+<script th:src="@{/assets2/mail/contact.js}"></script>
+<!-- Template Javascript -->
+<script th:src="@{/assets2/js/main.js}"></script>
+
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+
+</body>
+</html>

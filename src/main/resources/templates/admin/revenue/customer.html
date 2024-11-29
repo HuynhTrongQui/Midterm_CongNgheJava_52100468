@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trang quản trị viên</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        window.onload = function () {
+            var dps = [];
+
+            /* Create the chart object */
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2",
+                title: {
+                    text: "Biểu đồ doanh thu khách hàng"
+                },
+                subtitles: [{
+                    text: "Code by 52100797"
+                }],
+                axisY: {
+                    title: "Tổng tiền",
+                    suffix: " VNĐ"
+                },
+                axisX: {
+                    title: "Customer"
+                },
+                data: [{
+                    type: "column",
+                    yValueFormatString: "#,000 VNĐ      ",
+                    dataPoints: dps
+                }]
+            });
+            var dataPointsList = /*[[${dataPointsList}]]*/ [];
+            for (let i = 0; i < dataPointsList.length; i++) {
+                for (let j = 0; j < dataPointsList[i].length; j++) {
+                    let dataPoint = dataPointsList[i][j];
+                    let yValue = parseFloat(dataPoint.y)
+                    let label = dataPoint.label;
+                    dps.push({
+                        label: label,
+                        y: yValue
+                    })
+                }
+            }
+            chart.render(); // Render the chart
+        }
+        /*]]>*/
+    </script>
+</head>
+
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10">
+            <a th:href="@{/admin/exports}">Export PDF</a>
+            <div class="card">
+                <div class="card-header bg-primary">Doanh số sản phẩm</div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr class="table-success">
+                            <th scope="col">Mã khách hàng</th>
+                            <th scope="col">Tên khách hàng</th>
+                            <th scope="col">Số lượng đơn hàng</th>
+                            <th scope="col">Doanh số</th>
+                            <th scope="col">Đơn hàng nhỏ nhất</th>
+                            <th scope="col">Đơn hàng lớn nhất</th>
+                            <th scope="col">Trung bình</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="revenueCustomerDTO: ${revenueCustomerDTOS}">
+                            <th scope="row" th:text="${revenueCustomerDTO.id}">1</th>
+                            <th th:text="${revenueCustomerDTO.name}">1</th>
+                            <td th:text="${revenueCustomerDTO.quantity}">Mark</td>
+                            <td th:text="${revenueCustomerDTO.total}" class="price-product">Otto</td>
+                            <td th:text="${revenueCustomerDTO.priceMin}" class="price-product">@mdo</td>
+                            <td th:text="${revenueCustomerDTO.priceMax}" class="price-product">@mdo</td>
+                            <td th:text="${revenueCustomerDTO.gpa}" class="price-product">@mdo</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr class="table-success">
+                            <th scope="col">Mã khách hàng</th>
+                            <th scope="col">Tên khách hàng</th>
+                            <th scope="col">Số lượng đơn hàng</th>
+                            <th scope="col">Doanh số</th>
+                            <th scope="col">Đơn hàng nhỏ nhất</th>
+                            <th scope="col">Đơn hàng lớn nhất</th>
+                            <th scope="col">Trung bình</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-10">
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+</html>

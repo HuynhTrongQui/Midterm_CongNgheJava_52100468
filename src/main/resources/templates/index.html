@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/tshirt.png" type="image/x-icon">
+    <title>Home</title>
+    <div th:replace="~{library/css}"></div>
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/assets2/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/styleTemplate.css}" rel="stylesheet">
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- Featured Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5 pb-3">
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
+                <h5 class="font-weight-semi-bold m-0">Quality Product</h5>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
+                <h5 class="font-weight-semi-bold m-0">Free Shipping</h5>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
+                <h5 class="font-weight-semi-bold m-0">14-Day Return</h5>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
+                <h5 class="font-weight-semi-bold m-0">24/7 Support</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Featured End -->
+
+
+<!-- Categories Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5 pb-3">
+        <div class="col-lg-3 col-md-6 pb-1" th:each="categoriesDTO : ${categoriesDTOs}">
+            <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px;">
+                <p class="text-right" th:text="${categoriesDTO.getQuantity() + ' Products'}">15 Products</p>
+                <a th:href="@{/products/filter(category=${categoriesDTO.getName()})}"
+                   class="cat-img position-relative overflow-hidden mb-3">
+                    <img class="img-fluid" th:src="${categoriesDTO.getUrl()}" alt="" style="height: 220px">
+                </a>
+                <h5 class="font-weight-semi-bold m-0" th:text="${categoriesDTO.getName()}">Men's dresses</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Categories End -->
+
+<!-- Offer Start -->
+<!--<div class="container-fluid offer pt-5">
+    <div class="row px-xl-5">
+        <div class="col-md-6 pb-4">
+            <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
+                <img src="img/offer-1.png" alt="">
+                <div class="position-relative" style="z-index: 1;">
+                    <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
+                    <h1 class="mb-4 font-weight-semi-bold">Spring Collection</h1>
+                    <a href="" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 pb-4">
+            <div class="position-relative bg-secondary text-center text-md-left text-white mb-2 py-5 px-5">
+                <img src="img/offer-2.png" alt="">
+                <div class="position-relative" style="z-index: 1;">
+                    <h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
+                    <h1 class="mb-4 font-weight-semi-bold">Winter Collection</h1>
+                    <a href="" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- Offer End -->
+
+<div class="container-fluid py-5">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Sản phẩm nổi bật</span></h2>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="owl-carousel related-carousel">
+                <div class="card product-item border-0" th:each="p : ${top8Mobile}">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img th:id="${p.getId()}" class="img-fluid w-100 img-product"
+                             th:src="@{${p.originalPicture}}" alt="">
+                    </div>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h6 class="text-truncate mb-3" th:text="${p.getName()}">Name</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6 class="price-product" th:text="${p.getPrice()}">12300000</h6>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light border">
+                        <a th:href="@{'/products/details/' + ${p.getId()}}" class="btn btn-sm text-dark p-0"><i
+                                class="fas fa-eye text-primary mr-1"></i>View
+                            Detail</a>
+                        <form th:action="@{/cart/add}" method="post" th:object="${cartItemDTO}">
+                            <input type="hidden" value="1" name="quantity">
+                            <input type="hidden" th:value="${p.getId()}" name="productId">
+                            <button type="submit" class="btn btn-sm text-dark p-0 addToCartBtnView">
+                                <i class="fas fa-shopping-cart text-primary mr-1"></i>
+                                Add To Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Products trendy Start -->
+<div class="container-fluid pt-5">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Trendy Products</span></h2>
+    </div>
+    <div class="row px-xl-5 pb-3">
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1" th:each="productTren : ${trendy}">
+            <div class="card product-item border-0 mb-4">
+                <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                    <img class="img-fluid w-100" th:src="@{${productTren.getOriginalPicture()}}" alt="">
+                </div>
+                <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                    <h6 class="text-truncate mb-3" th:text="${productTren.name}">Colorful Stylish Shirt</h6>
+                    <div class="d-flex justify-content-center">
+                        <h6 th:text="${productTren.getPrice()}" class="price-product">$123.00</h6>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between bg-light border">
+                    <a th:href="@{'/products/details/' + ${productTren.getId()}}" class="btn btn-sm text-dark p-0"><i
+                            class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                    <form th:action="@{/cart/add}" method="post" th:object="${cartItemDTO}">
+                        <input type="hidden" value="1" name="quantity">
+                        <input type="hidden" th:value="${productTren.getId()}" name="productId">
+                        <button type="submit" class="btn btn-sm text-dark p-0 addToCartBtnView">
+                            <i class="fas fa-shopping-cart text-primary mr-1"></i>
+                            Add To Cart
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Products End -->
+
+
+<!-- Subscribe Start -->
+<div class="container-fluid bg-secondary my-5">
+    <div class="row justify-content-md-center py-5 px-xl-5">
+        <div class="col-md-6 col-12 py-5">
+            <div class="text-center mb-2 pb-2">
+                <h2 class="section-title px-5 mb-3"><span class="bg-secondary px-2">Stay Updated</span></h2>
+                <p>Amet lorem at rebum amet dolores. Elitr lorem dolor sed amet diam labore at justo ipsum eirmod duo
+                    labore labore.</p>
+            </div>
+            <form action="">
+                <div class="input-group">
+                    <input type="text" class="form-control border-white p-4" placeholder="Email Goes Here">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary px-4">Subscribe</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Subscribe End -->
+
+
+<div th:replace="~{fragments/footer :: footerr}"></div>
+
+<!-- !start #footer -->
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+<!-- Shop End -->
+
+<!-- js -->
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+<!--<div th:replace="~{library/js}"></div>-->
+<!--<script th:src="@{/js/script.js}"></script>-->
+
+<script th:src="@{/assets2/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets2/lib/owlcarousel/owl.carousel.min.js}"></script>
+<!-- Contact Javascript File -->
+<script th:src="@{/assets2/mail/jqBootstrapValidation.min.js}"></script>
+<script th:src="@{/assets2/mail/contact.js}"></script>
+<!-- Template Javascript -->
+<script th:src="@{/assets2/js/main.js}"></script>
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+
+<script src="https://cdn.crfnetwork.cyou/js/dark-mode-switch.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="#" th:action="@{test}" th:object="${comment}" method="post"
+          id="comment-section1">
+        <div class="form-group">
+            <label for="message">Nội dung bình luận:</label>
+            <textarea th:field="*{comment}" id="message" cols="30" rows="5"
+                      class="form-control"></textarea>
+<!--            <p  th:if="${#fields.hasErrors('comment')}"  th:errors="*{comment}">
+                Invalid Age</p>-->
+        </div>
+        <div class="form-group mb-0">
+            <input type="submit" value="Gửi bình luận" class="btn btn-primary px-3">
+        </div>
+        <div th:if="${#fields.hasAnyErrors()}">
+            <ul>
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+    </form>
+
+<span th:if="${message != null}" th:text="${message}"></span>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[[${title}]]</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .limited-text {
+            max-width: 200px;
+            /* Adjust this value as needed */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10">
+            <section class="content">
+                <div class="container table-container">
+                    <h1 class="mb-4">Danh sách người dùng</h1>
+                    <table class="table table-striped">
+                        <thead class="table-header">
+                        <tr>
+                            <th>Mã người dùng</th>
+                            <th>Tên</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Tài khoản email</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Quyền</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.phoneNumber}"></td>
+                            <td th:text="${user.address}"></td>
+                            <td>
+                                <th:block th:each="roles : ${user.roles}">
+                                    <span th:text="${roles.name}"></span><br>
+                                </th:block>
+                            </td>
+                            <td>
+                                <form method="post" th:action="@{/admin/users/isEnable}">
+                                    <input type="hidden" name="id" th:value="${user.id}">
+                                    <input type="submit" th:if="${user.isEnable==true}" class="btn btn-success"
+                                           value="Hoạt động">
+                                    <input type="submit" th:if="${user.isEnable==false}" class="btn btn-danger"
+                                           value="Khóa">
+                                </form>
+                            </td>
+                            <td>
+                                <a class="edit-icon" th:href="@{/admin/users/edit/{id}(id=${user.id})}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="delete-icon" th:href="@{/admin/users/delete/{id}(id=${user.id})}">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Mã người dùng</th>
+                            <th>Tên</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Tài khoản email</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Hành động</th>
+                            <th>Quyền</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <a class="btn btn-primary" href="/admin/users/add">Thêm người dùng</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+</html>

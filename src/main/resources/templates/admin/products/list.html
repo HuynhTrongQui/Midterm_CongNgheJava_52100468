@@ -1,0 +1,178 @@
+</html>
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Trang danh sach san pham</title>
+
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- Tempusdominus Bootstrap 4 -->
+	<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		.limited-text {
+			max-width: 200px;
+			/* Adjust this value as needed */
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	</style>
+</head>
+
+<body style="height: 1200px !important;">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-2" style="padding: 0">
+				<div th:replace="~{fragments/sidebar :: aside}"></div>
+			</div>
+			<div class="col-10">
+				<section class="content">
+					<div class="container">
+						<h1>Product List</h1>
+
+						<a class="btn btn-success mb-3" th:href="@{/admin/products/new}">Add New Product</a>
+
+						<form th:action="@{/admin/products/search}" method="post">
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" name="keyword" placeholder="Search products...">
+								<button class="btn btn-outline-secondary" type="submit">Search</button>
+							</div>
+						</form>
+
+						<span th:if="${errorMessage} != null" th:text="${errorMessage}" style="color: red"></span>
+
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Image</th>
+									<th>Price</th>
+									<th>Color</th>
+									<th>Description</th>
+									<th>Information</th>
+									<th>Size</th>
+									<th>View Count</th>
+									<th>Category</th>
+									<th>Manufacture</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:if="${products} != null" th:each="product : ${products}">
+									<td th:text="${product.id}"></td>
+									<td th:text="${product.name}"></td>
+									<th>
+										<img th:src="@{${product.logoImage}}" style="width: 100px">
+									</th>
+									<td th:text="${product.price}"></td>
+									<td th:text="${product.color}"></td>
+									<td th:text="${product.description}" class="limited-text"></td>
+									<td th:text="${product.information}" class="limited-text"></td>
+									<td th:text="${product.size}"></td>
+									<td th:if="${product.viewCount} != null" th:text="${product.viewCount}"></td>
+									<td th:if="${product.viewCount} == null" th:text="0"></td>
+									<td th:text="${product.category != null ? product.category.name : ''}"></td>
+									<td>
+										<span th:if="${ #lists.isEmpty(product.manufacture)}">Undefine</span>
+										<span th:each="manufacturer : ${product.manufacture}">
+											<span th:text="${manufacturer.name}"
+												th:if="${not #lists.isEmpty(product.manufacture)}"></span>
+										</span>
+									</td>
+									<td>
+										<a class="btn btn-primary"
+											th:href="@{/admin/products/view/{id}(id=${product.id})}">View</a>
+										<a class="btn btn-warning"
+											th:href="@{/admin/products/edit/{id}(id=${product.id})}">Edit</a>
+										<a class="btn btn-danger"
+											th:href="@{/admin/products/delete/{id}(id=${product.id})}">Delete</a>
+									</td>
+								</tr>
+							</tbody>
+
+							<!-- Pagination-->
+							<tfoot th:if="${products} != null">
+								<tr>
+									<td colspan="10">
+										Page:
+										<!-- Previous Page -->
+										<span th:if="${currentPage > 0}">
+											<a
+												th:href="@{/admin/products/list(currentPage=${currentPage} - 1, resultIdSearch=${ids})}">Previous</a>
+										</span>
+										<!-- Page number -->
+										<span th:if="${totalPages > 0}"
+											th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
+											<!-- Current page -->
+											<span th:if="${currentPage} == ${pageNumber}"
+												th:text="${pageNumber}"></span>
+											<!-- Other page -->
+											<span th:if="${currentPage} != ${pageNumber}">
+												<a th:href="@{/admin/products/list(currentPage=${pageNumber}, resultIdSearch=${ids})}"
+													th:text="${pageNumber}"></a>
+											</span>
+											<!-- Separator -->
+											<span>|</span>
+										</span>
+
+										<!-- Next Page -->
+										<span th:if="${currentPage + 1 &lt; totalPages}">
+											<a
+												th:href="@{/admin/products/list(currentPage=${currentPage} + 1, resultIdSearch=${ids})}">Next</a>
+										</span>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- ChartJS -->
+<!--<script th:src="@{/admin/plugins/chart.js/Chart.min.js}"></script>
+&lt;!&ndash; Sparkline &ndash;&gt;
+<script th:src="@{/admin/plugins/sparklines/sparkline.js}"></script>
+&lt;!&ndash; JQVMap &ndash;&gt;
+<script th:src="@{/admin/plugins/jqvmap/jquery.vmap.min.js}"></script>
+<script th:src="@{/admin/plugins/jqvmap/maps/jquery.vmap.usa.js}"></script>
+&lt;!&ndash; jQuery Knob Chart &ndash;&gt;
+<script th:src="@{/admin/plugins/jquery-knob/jquery.knob.min.js}"></script>
+&lt;!&ndash; daterangepicker &ndash;&gt;
+<script th:src="@{/admin/plugins/moment/moment.min.js}"></script>
+<script th:src="@{/admin/plugins/daterangepicker/daterangepicker.js}"></script>
+&lt;!&ndash; Tempusdominus Bootstrap 4 &ndash;&gt;
+<script th:src="@{/admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
+&lt;!&ndash; Summernote &ndash;&gt;
+<script th:src="@{/admin/plugins/summernote/summernote-bs4.min.js}"></script>
+&lt;!&ndash; overlayScrollbars &ndash;&gt;
+<script th:src="@{/admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>-->
+<!-- AdminLTE App -->
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!--<script th:src="@{/admin/dist/js/pages/dashboard.js}"></script>-->
+
+</html>

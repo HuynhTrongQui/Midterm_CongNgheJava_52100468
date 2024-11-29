@@ -1,0 +1,14 @@
+<div th:fragment="sorting(field,direction,title)">
+    <a th:class="${data.products.size() <= 1 ? 'btn btn-light m-1 disabled' : 'btn btn-light m-1'}"
+       th:href="@{'?'
+                +${keyword != null && keyword != '' ? 'keyword=' + keyword + '&' :''}
+                +${manufacture != null && manufacture!= '' ? 'manufacture=' + valueMan +'&' :  ''}
+                +${category_filter != null  && category_filter!= '' ? 'category=' + category_filter + '&':''}
+                +${price  > 0 ? 'price=' + price + '&'  :   ''}
+                +'currentPage='+${1}
+                +'&pageSize='+ ${pageSize}
+                +'&sortBy=' + ${field}
+                +'&orderField=' + ${direction}
+            }"
+       th:text="${title}"></a>
+</div>

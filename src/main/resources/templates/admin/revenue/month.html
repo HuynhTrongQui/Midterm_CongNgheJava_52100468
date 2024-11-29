@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trang quản trị viên</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var dataPoints =/*[[${dataPoints}]]*/ [];
+        console.log(dataPoints)
+        var data = [];
+        for (let i = 0; i < dataPoints.length; i++) {
+            let month = dataPoints[i].month;
+            let year = dataPoints[i].year;
+            let total = dataPoints[i].total;
+            let date = new Date(parseInt(year), parseInt(month));
+            data.push({
+                x: date,
+                y: total
+            })
+        }
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light1",
+                title: {
+                    text: "Thống kê doanh thu theo năm"
+                },
+                axisY: {
+                    includeZero: false,
+                    postfix: "VNĐ"
+                },
+                toolTip: {
+                    shared: true
+                },
+                legend: {
+                    fontSize: 16
+                },
+                data: [{
+                    type: "splineArea",
+                    showInLegend: true,
+                    name: "doanh thu",
+                    yValueFormatString: "#,##0 VNĐ",
+                    xValueFormatString: "MMM YYYY",
+                    dataPoints: data
+                }]
+            });
+            chart.render();
+
+        }
+        /*]]>*/
+    </script>
+
+</head>
+
+<body style="height: 1200px !important;">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="padding: 0">
+            <div th:replace="~{fragments/sidebar :: aside}"></div>
+        </div>
+        <div class="col-10 p-2">
+            <form th:action="@{/admin/revenue/month}" method="post">
+                <input type="number" min="1900" max="2099" step="1" th:value="${year} ?  ${year} : '2023'" name="year"/>
+                <button type="submit">Search</button>
+            </form>
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/admin/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<script th:src="@{/admin/dist/js/adminlte.js}"></script>
+
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!--<script th:src="@{/admin/dist/js/pages/dashboard.js}"></script>-->
+<!--    Big -->
+<script src="https://cdn.jsdelivr.net/npm/big.js@5.2.2/big.min.js"></script>
+<script>
+    // Replace the existing code to use Big objects
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        prefix: 'VNĐ'
+    });
+    let priceProduct = $('.price-product');
+    for (let i = 0; i < priceProduct.length; i++) {
+        let priceValue = new Big(priceProduct[i].innerHTML); // Create a Big object with the price value
+        priceProduct[i].innerText = VND.format(priceValue.toFixed(0)).replace("₫", "VNĐ"); // Use toFixed(0) to get the rounded integer value and format it
+    }
+</script>
+</html>

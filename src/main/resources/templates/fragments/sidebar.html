@@ -1,0 +1,135 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4" STYLE="width: 100%" th:fragment="aside">
+    <div class="sidebar" style="height: 1200px">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="info">
+                <a href="#" class="d-block" th:text="${isAdmin}"></a>
+                <a href="/logout">Đăng xuất</a>
+            </div>
+        </div>
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
+                <li class="nav-item menu-open">
+                    <a th:href="@{/admin}" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Tổng quan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>Quản lý sản phẩm
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/products/list}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/products/new}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm sản phẩm</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/users" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Quản lý tài khoản
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <!--<ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Accounts</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add Account</p>
+                            </a>
+                        </li>
+                    </ul>-->
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/categories/category_manage" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Quản lý loại sản phẩm
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/manufactures/producer_manage" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Quản lý nhà sản xuất
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/order}" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>Manage Order</p>
+                    </a>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Báo cáo thống kê
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/revenue/product}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thống kê theo sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/revenue/category}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thống kê theo loại sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/revenue/customer}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thống kê theo khách hàng</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/revenue/day}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thống kê theo ngày</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/revenue/month}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thống kê theo tháng</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/revenue/year}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thống kê theo năm</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
